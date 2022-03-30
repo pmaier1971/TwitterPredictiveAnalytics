@@ -7,7 +7,27 @@
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
+
+pkgTest <- function(x){
+  suppressMessages(
+    suppressWarnings(
+      if (!require(x,character.only = TRUE)) {
+        install.packages(x,dep=TRUE)
+        if(!require(x,character.only = TRUE)) stop("Package not found")
+      }
+    )
+  )
+}
+
+options(shiny.maxRequestSize=30*1024^2)
+
+pkgTest("shiny")
+pkgTest("readxl")
+pkgTest("dplyr")
+pkgTest("DT")
+pkgTest("stringr")
+
+options(scipen=999)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
@@ -15,19 +35,13 @@ shinyUI(fluidPage(
     # Application title
     titlePanel("Twitter: Predictive Analytics"),
 
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
+    fluidRow(
+      column(3, fileInput("fileTwitterData", "Upload Twitter Data")
+             )
+    ),
+    
+    plotOutput("BasicStats"),
+    
+    dataTableOutput("dataCheck")
 
-        # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("distPlot")
-        )
-    )
-))
+    ))
