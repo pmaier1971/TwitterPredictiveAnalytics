@@ -40,8 +40,21 @@ shinyUI(fluidPage(
              )
     ),
     
-    plotOutput("BasicStats"),
+    # fluidRow(
+    #   column(3, 
+    #          uiOutput("selector_hashags")
+    #   )
+    # ),
     
-    dataTableOutput("dataCheck")
+    tabsetPanel(type = "tabs",
+                tabPanel("Basic Stats", plotOutput("ImpressionsByDay"), 
+                         plotOutput("ImpressionsByHour"), plotOutput("ImpressionsByMinute")),
+                tabPanel("HashTags", uiOutput("selector_hashags"), plotOutput("plotHashtags")),
+                tabPanel("Data", dataTableOutput("dataCheck"))
+    )
+    
+    #plotOutput("BasicStats"),
+    
+    #dataTableOutput("dataCheck")
 
     ))
