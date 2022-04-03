@@ -26,22 +26,47 @@ pkgTest("readxl")
 pkgTest("dplyr")
 pkgTest("DT")
 pkgTest("stringr")
+pkgTest("shinydashboard")
+
 
 options(scipen=999)
+quartzFonts(avenir = c("Avenir Book", "Avenir Black", "Avenir Book Oblique", 
+                       "Avenir Black Oblique"))
+
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-
-    # Application title
-    titlePanel("Twitter: Predictive Analytics"),
-
+  
+  # Application title
+  titlePanel("Twitter: Predictive Analytics"),
+  
+  dashboardBody(
     fluidRow(
-      column(3, fileInput("fileTwitterData", "Upload Twitter Data")
-             )
+      column(3, fileInput("fileTwitterData", "Upload Twitter Data")),
+      column(6, 
+             valueBoxOutput("valuebox_no_tweets"),
+             valueBoxOutput("valuebox_daterange"),
+             valueBoxOutput("valuebox_impressionsPerday"))
     ),
     
-    plotOutput("BasicStats"),
-    
-    dataTableOutput("dataCheck")
-
-    ))
+    tabsetPanel(type = "tabs",
+                tabPanel("Basic Stats", 
+                         fluidRow(
+                           column(4, plotOutput("ImpressionsByDay")), 
+                           column(4, plotOutput("ImpressionsByHour")),
+                           column(4, plotOutput("ImpressionsByMinute"))
+                         )),
+                         tabPanel("HashTag Analysis", 
+                                  fluidRow(
+                                    column(6, plotOutput("HashtagPopularity") ),
+                                    column(6, plotOutput("HashtagImpact") )),
+                                  uiOutput("selector_hashags"),
+                                  fluidRow(
+                                    column(6, plotOutput("HashtagMakeDifferences")),
+                                    column(6, plotOutput("plotHashtags"))) 
+                         ),
+                         tabPanel("Explore", dataTableOutput("dataCheck"))
+                )
+    )
+  ))
+  
