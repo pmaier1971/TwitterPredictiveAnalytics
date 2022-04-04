@@ -27,10 +27,8 @@ pkgTest("dplyr")
 pkgTest("DT")
 pkgTest("stringr")
 pkgTest("lubridate")
-<<<<<<< HEAD
+pkgTest("RColorBrewer")
 pkgTest("shinydashboard")
-=======
->>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
 
 options(scipen=999)
 
@@ -48,8 +46,6 @@ shinyServer(function(input, output) {
     if (is.null(file1)) {
       return(NULL)
     }
-    
-    
     
     twitterData = reactive({
       
@@ -79,17 +75,17 @@ shinyServer(function(input, output) {
         list_hashtags = append(list_hashtags, str_extract_all(twitterData[idx, "Tweet.text"], '#\\w+', simplify = T))
       }
       
-<<<<<<< HEAD
+      
       list_hashtags = sort( unique(tolower(unlist(list_hashtags))) )
-=======
+      
       list_hashtags = sort( tolower(unique(unlist(list_hashtags))) )
->>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
+      
       
       selectInput("uiSelection_hashtag", label = "Hashtags", list_hashtags)
       
     })
     
-<<<<<<< HEAD
+    
     # Boxes
     
     output$valuebox_no_tweets <- renderValueBox({
@@ -100,13 +96,13 @@ shinyServer(function(input, output) {
       )
     })
     
-
+    
     output$valuebox_daterange <- renderValueBox({
       
       twitterData = twitterData()
       
       valueBox(
-       as.character( abs( as.numeric( difftime( twitterData$date[1], twitterData$date[nrow(twitterData)], units = "days" ) ))), 
+        as.character( abs( as.numeric( difftime( twitterData$date[1], twitterData$date[nrow(twitterData)], units = "days" ) ))), 
         "Days Of Data", icon = icon("list"),
         color = "blue"
       )
@@ -119,7 +115,7 @@ shinyServer(function(input, output) {
       valueBox(
         as.character( 
           round( mean(twitterData$impressions), 0)
-          ), 
+        ), 
         "Impressions / Tweet", icon = icon("list"),
         color = "red"
       )
@@ -155,7 +151,7 @@ shinyServer(function(input, output) {
       axis(2, at = hashtag_plot, labels = table_hashtag_popularity[5:1,1], las = 2)
       
     })
-
+    
     output$HashtagImpact = renderPlot({
       twitterData = twitterData()
       
@@ -221,7 +217,7 @@ shinyServer(function(input, output) {
         ContainsHashTagRstats = 0,
         ContainsMultipleHashTags = 0,
         ContainsChosenHashTag = 0
-        )
+      )
       
       results$NoHashTag = mean( twitterData[ twitterData$NoHashTag == 1, "impressions"] ) 
       results$ContainsHashTagRstats = mean( twitterData[ twitterData$ContainsHashTagRstats == 1, "impressions"] )
@@ -229,7 +225,7 @@ shinyServer(function(input, output) {
       results$ContainsChosenHashTag = mean( twitterData[ twitterData$ContainsChosenHashTag == 1, "impressions"] )
       
       if (is.nan(results$NoHashTag)) results$NoHashTag = 0
-
+      
       par(mar=c(4,10,4,4))
       
       hashtag_plot = barplot(as.matrix(results), horiz = TRUE, col = chart.col[1:3], yaxt = "n",
@@ -240,19 +236,16 @@ shinyServer(function(input, output) {
     
     
     
-    
-    
-=======
     # Analysis
->>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
+    
     output$dataCheck = renderDataTable({
       results = twitterData()
       results = results[,3:6]
       return(results)
     })
-      
+    
     output$ImpressionsByDay = renderPlot({
-     
+      
       data = twitterData()
       data$NoOfTweets = 1
       dataElements = c("impressions", "engagements", "retweets", "replies", "NoOfTweets")
@@ -263,117 +256,90 @@ shinyServer(function(input, output) {
       tweetPerDay = tweetPerDay[order(tweetPerDay$Day), ]
       tweetPerDay$impressions = tweetPerDay$impressions / tweetPerDay$NoOfTweets
       
-<<<<<<< HEAD
+      
       plot(tweetPerDay$impressions, type = "l", main = paste0("Which Day of the Week Generates \nThe Most Impressions?"), 
-=======
-      
-      plot(tweetPerDay$impressions, type = "l", main = paste0("On Average You Earned ", 
-                                                              round( mean(tweetPerDay$impressions), 0),
-                                                              " Impressions / Day"), 
->>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
-           xaxt = "n", xlab="", ylab="",
-           col = chart.col[1], lwd = 2)
-      axis(1, at=1:7, label = tweetPerDay$Day,
-           col.axis="black", cex.axis=0.9)
-      
+                xaxt = "n", xlab="", ylab="",
+                col = chart.col[1], lwd = 2)
+           axis(1, at=1:7, label = tweetPerDay$Day,
+                col.axis="black", cex.axis=0.9)
+           
     })
-    
-    output$ImpressionsByHour = renderPlot({
       
-      data = twitterData()
-<<<<<<< HEAD
-      data$NoOfTweets = 1
-      dataElements = c("impressions", "engagements", "retweets", "replies", "NoOfTweets")
-=======
-      dataElements = c("impressions", "engagements", "retweets", "replies")
->>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
-      
-      tweetPerHour = aggregate(data[,dataElements], by=list(Hour = data$hour), sum)
-      
-      tweetPerHour = left_join( data.frame(Hour = 1:24), tweetPerHour)
-<<<<<<< HEAD
-      tweetPerHour$impressions = tweetPerHour$impressions / tweetPerHour$NoOfTweets
-      tweetPerHour[is.na(tweetPerHour)] = 0
-      
-      plot(tweetPerHour$impressions, type = "l", main = "What Hour of the Day \nGenerates The Most Impressions?", 
-           xaxt = "n", 
-           xlab="", ylab="",
-           col = chart.col[1], lwd = 2)
-      axis(1, at=1:nrow(tweetPerHour), label = paste0(tweetPerHour$Hour, ":00"),
-=======
-      tweetPerHour[is.na(tweetPerHour)] = 0
-      
-      plot(tweetPerHour$impressions, type = "l", main = "Impressions by Hour", 
-           xaxt = "n", 
-           xlab="", ylab="",
-           col = chart.col[1], lwd = 2)
-      axis(1, at=1:nrow(tweetPerHour), label = tweetPerHour$Hour,
->>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
-            col.axis="black", cex.axis=0.9)
-      
-    })
-    
-    output$ImpressionsByMinute = renderPlot({
-      
-      data = twitterData()
-<<<<<<< HEAD
-      data$NoOfTweets = 1
-      dataElements = c("impressions", "engagements", "retweets", "replies", "NoOfTweets")
-      
-      tweetPerMinute = aggregate(data[,dataElements], by=list(Minute = data$minute), sum)
-      tweetPerMinute = left_join( data.frame(Minute = 1:60), tweetPerMinute)
-      tweetPerMinute$impressions = tweetPerMinute$impressions / tweetPerMinute$NoOfTweets
-      tweetPerMinute[is.na(tweetPerMinute)] = 0
-      
-      plot(tweetPerMinute$impressions, type = "l", main = "What Minute \nGenerates The Most Impressions?", 
-=======
-      dataElements = c("impressions", "engagements", "retweets", "replies")
-      
-      tweetPerMinute = aggregate(data[,dataElements], by=list(Minute = data$minute), sum)
-      tweetPerMinute = left_join( data.frame(Minute = 1:60), tweetPerMinute)
-      tweetPerMinute[is.na(tweetPerMinute)] = 0
-      
-      plot(tweetPerMinute$impressions, type = "l", main = "Impressions by Minute", 
->>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
-           xaxt = "n", 
-           xlab="", ylab="",
-           col = chart.col[1], lwd = 2)
-      axis(1, at=1:nrow(tweetPerMinute), label = tweetPerMinute$Hour,
-           col.axis="black", cex.axis=0.9)
-      
-    })
-    
-    output$plotHashtags = renderPlot({
-      
-      twitterData = twitterData()
-      emptyFrame = data.frame(Date = seq(as.Date(twitterData()[1, "date"]), 
-                                         as.Date(twitterData()[nrow(twitterData()), "date"]),'days'))
-      twitterData$include = FALSE
-      
-      for (idx in 1:nrow(twitterData)) {
-        list_hashtags = str_extract_all(twitterData[idx, "Tweet.text"], '#\\w+', simplify = T)
-        if (input$uiSelection_hashtag %in% tolower( list_hashtags )) {
-          twitterData[idx, "include"] = TRUE
-        }
-      }
-      
-      dataElements = c("impressions", "engagements", "retweets", "replies")
-      twitterData = twitterData[twitterData$include == TRUE, ]
-      twitterData = aggregate(twitterData[,dataElements], by=list(Date = twitterData$date), sum)
-      
-      
-      
-      twitterData = left_join( emptyFrame, twitterData)
-      twitterData[is.na(twitterData)] = 0
-      
-      plot(twitterData$impressions, type = "l", main = paste0("Impressions of Tweets containing ",  
-                                                              input$uiSelection_hashtag ), 
-           xaxt = "n", xlab="", ylab="",
-           col = chart.col[1], lwd = 2)
-      axis(1, at=1:nrow(twitterData), label = twitterData$Date,
-           col.axis="black", cex.axis=0.9)
-      
-    })
-    
+      output$ImpressionsByHour = renderPlot({
+        
+        data = twitterData()
+        
+        data$NoOfTweets = 1
+        dataElements = c("impressions", "engagements", "retweets", "replies", "NoOfTweets")
+        
+        
+        tweetPerHour = aggregate(data[,dataElements], by=list(Hour = data$hour), sum)
+        tweetPerHour = left_join( data.frame(Hour = 1:24), tweetPerHour)
+        tweetPerHour$impressions = tweetPerHour$impressions / tweetPerHour$NoOfTweets
+        tweetPerHour[is.na(tweetPerHour)] = 0
+        
+        plot(tweetPerHour$impressions, type = "l", main = "What Hour of the Day \nGenerates The Most Impressions?", 
+             xaxt = "n", 
+             xlab="", ylab="",
+             col = chart.col[1], lwd = 2)
+        axis(1, at=1:nrow(tweetPerHour), label = paste0(tweetPerHour$Hour, ":00") )
+             
+      })
+        
+        output$ImpressionsByMinute = renderPlot({
+          
+          data = twitterData()
+          
+          data$NoOfTweets = 1
+          dataElements = c("impressions", "engagements", "retweets", "replies", "NoOfTweets")
+          
+          tweetPerMinute = aggregate(data[,dataElements], by=list(Minute = data$minute), sum)
+          tweetPerMinute = left_join( data.frame(Minute = 1:60), tweetPerMinute)
+          tweetPerMinute$impressions = tweetPerMinute$impressions / tweetPerMinute$NoOfTweets
+          tweetPerMinute[is.na(tweetPerMinute)] = 0
+          
+
+               plot(tweetPerMinute$impressions, type = "l", main = "Impressions by Minute", 
+                    xaxt = "n", 
+                    xlab="", ylab="",
+                    col = chart.col[1], lwd = 2)
+               axis(1, at=1:nrow(tweetPerMinute), label = tweetPerMinute$Hour,
+                    col.axis="black", cex.axis=0.9)
+               
+        })
+          
+          output$plotHashtags = renderPlot({
+            
+            twitterData = twitterData()
+            emptyFrame = data.frame(Date = seq(as.Date(twitterData()[1, "date"]), 
+                                               as.Date(twitterData()[nrow(twitterData()), "date"]),'days'))
+            twitterData$include = FALSE
+            
+            for (idx in 1:nrow(twitterData)) {
+              list_hashtags = str_extract_all(twitterData[idx, "Tweet.text"], '#\\w+', simplify = T)
+              if (input$uiSelection_hashtag %in% tolower( list_hashtags )) {
+                twitterData[idx, "include"] = TRUE
+              }
+            }
+            
+            dataElements = c("impressions", "engagements", "retweets", "replies")
+            twitterData = twitterData[twitterData$include == TRUE, ]
+            twitterData = aggregate(twitterData[,dataElements], by=list(Date = twitterData$date), sum)
+            
+            
+            
+            twitterData = left_join( emptyFrame, twitterData)
+            twitterData[is.na(twitterData)] = 0
+            
+            plot(twitterData$impressions, type = "l", main = paste0("Impressions of Tweets containing ",  
+                                                                    input$uiSelection_hashtag ), 
+                 xaxt = "n", xlab="", ylab="",
+                 col = chart.col[1], lwd = 2)
+            axis(1, at=1:nrow(twitterData), label = twitterData$Date,
+                 col.axis="black", cex.axis=0.9)
+            
+          })
+          
   })
 })
+      

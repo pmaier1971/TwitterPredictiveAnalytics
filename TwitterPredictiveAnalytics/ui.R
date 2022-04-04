@@ -49,7 +49,7 @@ shinyUI(fluidPage(
              valueBoxOutput("valuebox_impressionsPerday"))
     ),
     
-<<<<<<< HEAD
+    
     tabsetPanel(type = "tabs",
                 tabPanel("Basic Stats", 
                          fluidRow(
@@ -57,37 +57,22 @@ shinyUI(fluidPage(
                            column(4, plotOutput("ImpressionsByHour")),
                            column(4, plotOutput("ImpressionsByMinute"))
                          )),
-                         tabPanel("HashTag Analysis", 
-                                  fluidRow(
-                                    column(6, plotOutput("HashtagPopularity") ),
-                                    column(6, plotOutput("HashtagImpact") )),
-                                  uiOutput("selector_hashags"),
-                                  fluidRow(
-                                    column(6, plotOutput("HashtagMakeDifferences")),
-                                    column(6, plotOutput("plotHashtags"))) 
-                         ),
-                         tabPanel("Explore", dataTableOutput("dataCheck"))
-                )
+                tabPanel("HashTag Analysis", 
+                         fluidRow(
+                           column(6, plotOutput("HashtagPopularity") ),
+                           column(6, plotOutput("HashtagImpact") )),
+                         uiOutput("selector_hashags"),
+                         fluidRow(
+                           column(6, plotOutput("HashtagMakeDifferences")),
+                           column(6, plotOutput("plotHashtags"))) 
+                ),
+                tabPanel("Explore", dataTableOutput("dataCheck"))
+                
     )
-  ))
   
-=======
-    # fluidRow(
-    #   column(3, 
-    #          uiOutput("selector_hashags")
-    #   )
-    # ),
-    
-    tabsetPanel(type = "tabs",
-                tabPanel("Basic Stats", plotOutput("ImpressionsByDay"), 
-                         plotOutput("ImpressionsByHour"), plotOutput("ImpressionsByMinute")),
-                tabPanel("HashTags", uiOutput("selector_hashags"), plotOutput("plotHashtags")),
-                tabPanel("Data", dataTableOutput("dataCheck"))
-    )
-    
-    #plotOutput("BasicStats"),
-    
-    #dataTableOutput("dataCheck")
+  )
+  
+  
+  
+))
 
-    ))
->>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
