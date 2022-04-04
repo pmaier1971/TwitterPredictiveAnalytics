@@ -27,7 +27,10 @@ pkgTest("dplyr")
 pkgTest("DT")
 pkgTest("stringr")
 pkgTest("lubridate")
+<<<<<<< HEAD
 pkgTest("shinydashboard")
+=======
+>>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
 
 options(scipen=999)
 
@@ -76,12 +79,17 @@ shinyServer(function(input, output) {
         list_hashtags = append(list_hashtags, str_extract_all(twitterData[idx, "Tweet.text"], '#\\w+', simplify = T))
       }
       
+<<<<<<< HEAD
       list_hashtags = sort( unique(tolower(unlist(list_hashtags))) )
+=======
+      list_hashtags = sort( tolower(unique(unlist(list_hashtags))) )
+>>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
       
       selectInput("uiSelection_hashtag", label = "Hashtags", list_hashtags)
       
     })
     
+<<<<<<< HEAD
     # Boxes
     
     output$valuebox_no_tweets <- renderValueBox({
@@ -234,6 +242,9 @@ shinyServer(function(input, output) {
     
     
     
+=======
+    # Analysis
+>>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
     output$dataCheck = renderDataTable({
       results = twitterData()
       results = results[,3:6]
@@ -252,7 +263,14 @@ shinyServer(function(input, output) {
       tweetPerDay = tweetPerDay[order(tweetPerDay$Day), ]
       tweetPerDay$impressions = tweetPerDay$impressions / tweetPerDay$NoOfTweets
       
+<<<<<<< HEAD
       plot(tweetPerDay$impressions, type = "l", main = paste0("Which Day of the Week Generates \nThe Most Impressions?"), 
+=======
+      
+      plot(tweetPerDay$impressions, type = "l", main = paste0("On Average You Earned ", 
+                                                              round( mean(tweetPerDay$impressions), 0),
+                                                              " Impressions / Day"), 
+>>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
            xaxt = "n", xlab="", ylab="",
            col = chart.col[1], lwd = 2)
       axis(1, at=1:7, label = tweetPerDay$Day,
@@ -263,12 +281,17 @@ shinyServer(function(input, output) {
     output$ImpressionsByHour = renderPlot({
       
       data = twitterData()
+<<<<<<< HEAD
       data$NoOfTweets = 1
       dataElements = c("impressions", "engagements", "retweets", "replies", "NoOfTweets")
+=======
+      dataElements = c("impressions", "engagements", "retweets", "replies")
+>>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
       
       tweetPerHour = aggregate(data[,dataElements], by=list(Hour = data$hour), sum)
       
       tweetPerHour = left_join( data.frame(Hour = 1:24), tweetPerHour)
+<<<<<<< HEAD
       tweetPerHour$impressions = tweetPerHour$impressions / tweetPerHour$NoOfTweets
       tweetPerHour[is.na(tweetPerHour)] = 0
       
@@ -277,6 +300,15 @@ shinyServer(function(input, output) {
            xlab="", ylab="",
            col = chart.col[1], lwd = 2)
       axis(1, at=1:nrow(tweetPerHour), label = paste0(tweetPerHour$Hour, ":00"),
+=======
+      tweetPerHour[is.na(tweetPerHour)] = 0
+      
+      plot(tweetPerHour$impressions, type = "l", main = "Impressions by Hour", 
+           xaxt = "n", 
+           xlab="", ylab="",
+           col = chart.col[1], lwd = 2)
+      axis(1, at=1:nrow(tweetPerHour), label = tweetPerHour$Hour,
+>>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
             col.axis="black", cex.axis=0.9)
       
     })
@@ -284,6 +316,7 @@ shinyServer(function(input, output) {
     output$ImpressionsByMinute = renderPlot({
       
       data = twitterData()
+<<<<<<< HEAD
       data$NoOfTweets = 1
       dataElements = c("impressions", "engagements", "retweets", "replies", "NoOfTweets")
       
@@ -293,6 +326,15 @@ shinyServer(function(input, output) {
       tweetPerMinute[is.na(tweetPerMinute)] = 0
       
       plot(tweetPerMinute$impressions, type = "l", main = "What Minute \nGenerates The Most Impressions?", 
+=======
+      dataElements = c("impressions", "engagements", "retweets", "replies")
+      
+      tweetPerMinute = aggregate(data[,dataElements], by=list(Minute = data$minute), sum)
+      tweetPerMinute = left_join( data.frame(Minute = 1:60), tweetPerMinute)
+      tweetPerMinute[is.na(tweetPerMinute)] = 0
+      
+      plot(tweetPerMinute$impressions, type = "l", main = "Impressions by Minute", 
+>>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
            xaxt = "n", 
            xlab="", ylab="",
            col = chart.col[1], lwd = 2)

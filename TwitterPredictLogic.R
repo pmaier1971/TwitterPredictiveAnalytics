@@ -38,7 +38,11 @@ chart.col   = brewer.pal(6, "Paired")
 twitterData = read.csv("tweet_activity_metrics_EconomicsShiny_20220201_20220301_en.csv")
 
 twitterData$date = as.Date(strtrim(twitterData$time, 10))
+<<<<<<< HEAD
 twitterData = twitterData[order(twitterData$date), ]
+=======
+twitterData = twitterData[order(twitterData$date), twitterData]
+>>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
 
 twitterData$weekday = weekdays(twitterData$date)
 twitterData$hour = hour(strptime( str_split_fixed(twitterData$time, " ", 5)[,2], format = "%H:%M"))
@@ -51,6 +55,7 @@ for (idx in 1:nrow(twitterData)) {
   list_hashtags = append(list_hashtags, str_extract_all(twitterData[idx, "Tweet.text"], '#\\w+', simplify = T))
 }
 
+<<<<<<< HEAD
 list_hashtags = unique(tolower(unlist(list_hashtags)))
 
 table_hashtag_popularity = data.frame(Hashtag = list_hashtags, Popularity = 0, Impressions = 0)
@@ -92,3 +97,8 @@ for (idx in 1:nrow(twitterData)) {
 
 
   
+=======
+list_hashtags = tolower(unique(unlist(list_hashtags)))
+
+
+>>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091

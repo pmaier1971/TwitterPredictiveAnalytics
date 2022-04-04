@@ -49,6 +49,7 @@ shinyUI(fluidPage(
              valueBoxOutput("valuebox_impressionsPerday"))
     ),
     
+<<<<<<< HEAD
     tabsetPanel(type = "tabs",
                 tabPanel("Basic Stats", 
                          fluidRow(
@@ -70,3 +71,23 @@ shinyUI(fluidPage(
     )
   ))
   
+=======
+    # fluidRow(
+    #   column(3, 
+    #          uiOutput("selector_hashags")
+    #   )
+    # ),
+    
+    tabsetPanel(type = "tabs",
+                tabPanel("Basic Stats", plotOutput("ImpressionsByDay"), 
+                         plotOutput("ImpressionsByHour"), plotOutput("ImpressionsByMinute")),
+                tabPanel("HashTags", uiOutput("selector_hashags"), plotOutput("plotHashtags")),
+                tabPanel("Data", dataTableOutput("dataCheck"))
+    )
+    
+    #plotOutput("BasicStats"),
+    
+    #dataTableOutput("dataCheck")
+
+    ))
+>>>>>>> 9b21dab37c0b8ef41214bd08da3c995699eec091
